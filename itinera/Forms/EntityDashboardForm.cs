@@ -15,6 +15,7 @@ namespace ItinerariApp.Forms
         private Button btnDeleteItinerary;
         private Button btnViewStats;
         private Button btnAddItinerary;
+        private Button btnExit;
         private ColumnHeader columnHeader2;
 
         private void InitializeComponent()
@@ -28,6 +29,7 @@ namespace ItinerariApp.Forms
             this.btnDeleteItinerary = new System.Windows.Forms.Button();
             this.btnViewStats = new System.Windows.Forms.Button();
             this.btnAddItinerary = new System.Windows.Forms.Button();
+            this.btnExit = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lvItineraries
@@ -112,9 +114,20 @@ namespace ItinerariApp.Forms
             this.btnAddItinerary.UseVisualStyleBackColor = true;
             this.btnAddItinerary.Click += new System.EventHandler(this.btnAddItinerary_Click);
             // 
+            // btnExit
+            // 
+            this.btnExit.Location = new System.Drawing.Point(554, 377);
+            this.btnExit.Name = "btnExit";
+            this.btnExit.Size = new System.Drawing.Size(48, 23);
+            this.btnExit.TabIndex = 12;
+            this.btnExit.Text = "Exit";
+            this.btnExit.UseVisualStyleBackColor = true;
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+            // 
             // EntityDashboardForm
             // 
             this.ClientSize = new System.Drawing.Size(614, 413);
+            this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnAddItinerary);
             this.Controls.Add(this.btnViewStats);
             this.Controls.Add(this.btnDeleteItinerary);
@@ -239,6 +252,11 @@ namespace ItinerariApp.Forms
         private void EntityDashboardForm_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
