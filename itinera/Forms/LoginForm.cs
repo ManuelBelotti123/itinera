@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using ItinerariApp.DataAccess;
+using ItinerariApp.Models;
 
 namespace ItinerariApp.Forms
 {
@@ -116,19 +117,16 @@ namespace ItinerariApp.Forms
             string username = txtUsername.Text;
             string password = txtPassword.Text;
 
-            string userType = ValidateUser(username, password);
-
-            if (!string.IsNullOrEmpty(userType))
+            if (ValidateUser(username, password))
             {
                 MessageBox.Show("Login successful!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        
-        // Apri la dashboard appropriata
+                // Apri la dashboard appropriata
                 Form dashboard;
-                if (userType == "base")
+                if (CurrentUser.UserType == "base")
                 {
                     dashboard = new UserDashboardForm();
                 }
-                else if (userType == "ente")
+                else if (CurrentUser.UserType == "ente")
                 {
                     dashboard = new EntityDashboardForm();
                 }
@@ -147,14 +145,14 @@ namespace ItinerariApp.Forms
             }
         }
 
-        private string ValidateUser(string username, string password)
+        private bool ValidateUser(string username, string password)
         {
             try
             {
                 using (var connection = Database.GetConnection())
                 {
                     connection.Open();
-                    string query = "SELECT user_type, password FROM gsv_users WHERE username = @username";
+                    string query = "SELECT user_id, username, user_type, password FROM gsv_users WHERE username = @username";
                     using (var cmd = new MySqlCommand(query, connection))
                     {
                         cmd.Parameters.AddWithValue("@username", username);
@@ -166,7 +164,11 @@ namespace ItinerariApp.Forms
                                 string storedHash = reader.GetString("password");
                                 if (BCrypt.Net.BCrypt.Verify(password, storedHash))
                                 {
-                                    return reader.GetString("user_type");
+                                    // Salva i dati dell'utente loggato
+                                    CurrentUser.UserId = reader.GetInt32("user_id");
+                                    CurrentUser.Username = reader.GetString("username");
+                                    CurrentUser.UserType = reader.GetString("user_type");
+                                    return true;
                                 }
                             }
                         }
@@ -177,7 +179,7 @@ namespace ItinerariApp.Forms
             {
                 MessageBox.Show($"Error: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            return null; // Restituisce null se il login non è valido
+            return false;
         }
 
         private void btnExit_Click(object sender, EventArgs e)

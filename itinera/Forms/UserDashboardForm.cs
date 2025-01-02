@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using ItinerariApp.DataAccess;
+using ItinerariApp.Models;
 
 namespace ItinerariApp.Forms
 {
@@ -12,6 +13,9 @@ namespace ItinerariApp.Forms
         private Button btnViewFavorites;
         private Button btnExit;
         private Label label1;
+        private Button btnViewAllItineraries;
+        private Button btnAddToFavorites;
+        private Button btnRemoveFromFavorites;
         private ListView lvItineraries;
 
         private void InitializeComponent()
@@ -22,6 +26,9 @@ namespace ItinerariApp.Forms
             this.btnViewFavorites = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.btnViewAllItineraries = new System.Windows.Forms.Button();
+            this.btnAddToFavorites = new System.Windows.Forms.Button();
+            this.btnRemoveFromFavorites = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lvItineraries
@@ -61,9 +68,9 @@ namespace ItinerariApp.Forms
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(154, 59);
+            this.btnExit.Location = new System.Drawing.Point(534, 379);
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(123, 23);
+            this.btnExit.Size = new System.Drawing.Size(32, 23);
             this.btnExit.TabIndex = 2;
             this.btnExit.Text = "Exit";
             this.btnExit.UseVisualStyleBackColor = true;
@@ -79,9 +86,42 @@ namespace ItinerariApp.Forms
             this.label1.TabIndex = 3;
             this.label1.Text = "User Dashboard";
             // 
+            // btnViewAllItineraries
+            // 
+            this.btnViewAllItineraries.Location = new System.Drawing.Point(154, 59);
+            this.btnViewAllItineraries.Name = "btnViewAllItineraries";
+            this.btnViewAllItineraries.Size = new System.Drawing.Size(109, 23);
+            this.btnViewAllItineraries.TabIndex = 4;
+            this.btnViewAllItineraries.Text = "View All";
+            this.btnViewAllItineraries.UseVisualStyleBackColor = true;
+            this.btnViewAllItineraries.Click += new System.EventHandler(this.btnViewAllItineraries_Click);
+            // 
+            // btnAddToFavorites
+            // 
+            this.btnAddToFavorites.Location = new System.Drawing.Point(270, 58);
+            this.btnAddToFavorites.Name = "btnAddToFavorites";
+            this.btnAddToFavorites.Size = new System.Drawing.Size(111, 23);
+            this.btnAddToFavorites.TabIndex = 5;
+            this.btnAddToFavorites.Text = "Add To Fav";
+            this.btnAddToFavorites.UseVisualStyleBackColor = true;
+            this.btnAddToFavorites.Click += new System.EventHandler(this.btnAddToFavorites_Click);
+            // 
+            // btnRemoveFromFavorites
+            // 
+            this.btnRemoveFromFavorites.Location = new System.Drawing.Point(387, 58);
+            this.btnRemoveFromFavorites.Name = "btnRemoveFromFavorites";
+            this.btnRemoveFromFavorites.Size = new System.Drawing.Size(111, 23);
+            this.btnRemoveFromFavorites.TabIndex = 6;
+            this.btnRemoveFromFavorites.Text = "Remove From Fav";
+            this.btnRemoveFromFavorites.UseVisualStyleBackColor = true;
+            this.btnRemoveFromFavorites.Click += new System.EventHandler(this.btnRemoveFromFavorites_Click);
+            // 
             // UserDashboardForm
             // 
             this.ClientSize = new System.Drawing.Size(622, 425);
+            this.Controls.Add(this.btnRemoveFromFavorites);
+            this.Controls.Add(this.btnAddToFavorites);
+            this.Controls.Add(this.btnViewAllItineraries);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnViewFavorites);
@@ -96,28 +136,44 @@ namespace ItinerariApp.Forms
         public UserDashboardForm()
         {
             InitializeComponent();
-            LoadItineraries();
+            LoadItineraries(false);
         }
 
-        private void LoadItineraries()
+        private void LoadItineraries(bool showFavorites)
         {
             try
             {
                 using (var connection = Database.GetConnection())
                 {
                     connection.Open();
-                    string query = "SELECT title, description FROM gsv_itineraries WHERE is_active = 1";
+                    string query;
+                    if (showFavorites)
+                    {
+                        query = @"SELECT gsv_itineraries.itinerary_id, gsv_itineraries.title, gsv_itineraries.description 
+                          FROM gsv_favorites 
+                          INNER JOIN gsv_itineraries ON gsv_favorites.itinerary_id = gsv_itineraries.itinerary_id
+                          WHERE gsv_favorites.user_id = @userId";
+                    }
+                    else
+                    {
+                        query = @"SELECT itinerary_id, title, description FROM gsv_itineraries WHERE is_active = 1";
+                    }
+
                     using (var cmd = new MySqlCommand(query, connection))
                     {
+                        if (showFavorites)
+                        {
+                            cmd.Parameters.AddWithValue("@userId", CurrentUser.UserId);
+                        }
+
                         using (var reader = cmd.ExecuteReader())
                         {
+                            lvItineraries.Items.Clear();
                             while (reader.Read())
                             {
-                                string title = reader.GetString("title");
-                                string description = reader.GetString("description");
-
-                                var listItem = new ListViewItem(title);
-                                listItem.SubItems.Add(description);
+                                var listItem = new ListViewItem(reader.GetInt32("itinerary_id").ToString());
+                                listItem.SubItems.Add(reader.GetString("title"));
+                                listItem.SubItems.Add(reader.GetString("description"));
                                 lvItineraries.Items.Add(listItem);
                             }
                         }
@@ -130,19 +186,87 @@ namespace ItinerariApp.Forms
             }
         }
 
+
         private void btnViewFavorites_Click(object sender, EventArgs e)
         {
+            LoadItineraries(true);
+        }
 
+        private void btnViewAllItineraries_Click(object sender, EventArgs e)
+        {
+            LoadItineraries(false);
         }
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Application.Exit();
         }
 
         private void UserDashboardForm_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnAddToFavorites_Click(object sender, EventArgs e)
+        {
+            if (lvItineraries.SelectedItems.Count > 0)
+            {
+                string selectedItineraryId = lvItineraries.SelectedItems[0].Text;
+                try
+                {
+                    using (var connection = Database.GetConnection())
+                    {
+                        connection.Open();
+                        string query = @"INSERT INTO gsv_favorites (user_id, itinerary_id) VALUES (@userId, @itineraryId)";
+                        using (var cmd = new MySqlCommand(query, connection))
+                        {
+                            cmd.Parameters.AddWithValue("@userId", CurrentUser.UserId); // Sostituisci con l'ID utente loggato
+                            cmd.Parameters.AddWithValue("@itineraryId", selectedItineraryId);
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                    MessageBox.Show("Itinerary added to favorites!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error adding to favorites: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select an itinerary to add to favorites.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void btnRemoveFromFavorites_Click(object sender, EventArgs e)
+        {
+            if (lvItineraries.SelectedItems.Count > 0)
+            {
+                string selectedItineraryId = lvItineraries.SelectedItems[0].Text;
+                try
+                {
+                    using (var connection = Database.GetConnection())
+                    {
+                        connection.Open();
+                        string query = @"DELETE FROM gsv_favorites WHERE user_id = @userId AND itinerary_id = @itineraryId";
+                        using (var cmd = new MySqlCommand(query, connection))
+                        {
+                            cmd.Parameters.AddWithValue("@userId", CurrentUser.UserId); // Sostituisci con l'ID utente loggato
+                            cmd.Parameters.AddWithValue("@itineraryId", selectedItineraryId);
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                    MessageBox.Show("Itinerary removed from favorites!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error removing from favorites: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select an itinerary to remove from favorites.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
     }
 }
