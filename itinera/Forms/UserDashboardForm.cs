@@ -11,6 +11,7 @@ namespace ItinerariApp.Forms
         private ColumnHeader columnHeader2;
         private Button btnViewFavorites;
         private Button btnExit;
+        private Label label1;
         private ListView lvItineraries;
 
         private void InitializeComponent()
@@ -20,6 +21,7 @@ namespace ItinerariApp.Forms
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnViewFavorites = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lvItineraries
@@ -32,7 +34,7 @@ namespace ItinerariApp.Forms
             this.lvItineraries.HideSelection = false;
             this.lvItineraries.Location = new System.Drawing.Point(21, 88);
             this.lvItineraries.Name = "lvItineraries";
-            this.lvItineraries.Size = new System.Drawing.Size(256, 314);
+            this.lvItineraries.Size = new System.Drawing.Size(507, 314);
             this.lvItineraries.TabIndex = 0;
             this.lvItineraries.UseCompatibleStateImageBehavior = false;
             this.lvItineraries.View = System.Windows.Forms.View.Details;
@@ -67,14 +69,27 @@ namespace ItinerariApp.Forms
             this.btnExit.UseVisualStyleBackColor = true;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(18, 18);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(168, 25);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "User Dashboard";
+            // 
             // UserDashboardForm
             // 
             this.ClientSize = new System.Drawing.Size(622, 425);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnViewFavorites);
             this.Controls.Add(this.lvItineraries);
             this.Name = "UserDashboardForm";
+            this.Load += new System.EventHandler(this.UserDashboardForm_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -123,6 +138,11 @@ namespace ItinerariApp.Forms
         private void btnExit_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void UserDashboardForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

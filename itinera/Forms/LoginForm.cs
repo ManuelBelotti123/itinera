@@ -2,7 +2,6 @@
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using ItinerariApp.DataAccess;
-using itinera.Forms;
 
 namespace ItinerariApp.Forms
 {
@@ -131,7 +130,7 @@ namespace ItinerariApp.Forms
                 }
                 else if (userType == "ente")
                 {
-                    dashboard = null; // new EntityDashboardForm();
+                    dashboard = new EntityDashboardForm();
                 }
                 else
                 {
