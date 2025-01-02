@@ -124,6 +124,7 @@ namespace ItinerariApp.Forms
             this.Controls.Add(this.txtDescription);
             this.Controls.Add(this.txtTitle);
             this.Name = "AddItineraryForm";
+            this.Load += new System.EventHandler(this.AddItineraryForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -177,13 +178,14 @@ namespace ItinerariApp.Forms
                 return;
             }
 
+            int itineraryId;
             try
             {
                 using (var connection = Database.GetConnection())
                 {
                     connection.Open();
                     string query = @"INSERT INTO gsv_itineraries (title, description, entity_id, location_id, is_active) 
-                                     VALUES (@title, @description, @entityId, @locationId, 1)";
+                             VALUES (@title, @description, @entityId, @locationId, 1)";
                     using (var cmd = new MySqlCommand(query, connection))
                     {
                         cmd.Parameters.AddWithValue("@title", title);
@@ -191,10 +193,16 @@ namespace ItinerariApp.Forms
                         cmd.Parameters.AddWithValue("@entityId", CurrentUser.UserId); // ID dell'ente loggato
                         cmd.Parameters.AddWithValue("@locationId", selectedLocation.Value);
                         cmd.ExecuteNonQuery();
+                        itineraryId = (int)cmd.LastInsertedId;
                     }
                 }
 
-                MessageBox.Show("Itinerary added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Itinerary added successfully! You can now add stages.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // Apri la finestra per aggiungere le tappe
+                var addStagesForm = new AddStagesForm(itineraryId);
+                addStagesForm.ShowDialog();
+
                 this.Close();
             }
             catch (Exception ex)
@@ -206,6 +214,11 @@ namespace ItinerariApp.Forms
         private void btnCancel_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void AddItineraryForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 

@@ -116,6 +116,9 @@
     <Compile Include="Forms\AddItineraryForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\AddStagesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\EntityDashboardForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -133,6 +136,9 @@
     <Compile Include="Utilities\PasswordHelper.cs" />
     <EmbeddedResource Include="Forms\AddItineraryForm.resx">
       <DependentUpon>AddItineraryForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AddStagesForm.resx">
+      <DependentUpon>AddStagesForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\EntityDashboardForm.resx">
       <DependentUpon>EntityDashboardForm.cs</DependentUpon>
