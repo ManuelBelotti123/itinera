@@ -227,8 +227,8 @@ namespace ItinerariApp.Forms
 
         private void btnViewStats_Click(object sender, EventArgs e)
         {
-            // Logica per visualizzare le statistiche
-            MessageBox.Show("View Stats clicked!");
+            var statsForm = new ViewStatsForm();
+            statsForm.ShowDialog();
         }
 
         private void lvItineraries_SelectedIndexChanged(object sender, EventArgs e)
