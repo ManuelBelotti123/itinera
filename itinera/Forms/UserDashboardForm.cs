@@ -16,6 +16,10 @@ namespace ItinerariApp.Forms
         private Button btnViewAllItineraries;
         private Button btnAddToFavorites;
         private Button btnRemoveFromFavorites;
+        private TextBox txtSearch;
+        private ComboBox cmbSearchBy;
+        private Button btnSearch;
+        private Label label2;
         private ListView lvItineraries;
 
         private void InitializeComponent()
@@ -29,6 +33,10 @@ namespace ItinerariApp.Forms
             this.btnViewAllItineraries = new System.Windows.Forms.Button();
             this.btnAddToFavorites = new System.Windows.Forms.Button();
             this.btnRemoveFromFavorites = new System.Windows.Forms.Button();
+            this.txtSearch = new System.Windows.Forms.TextBox();
+            this.cmbSearchBy = new System.Windows.Forms.ComboBox();
+            this.btnSearch = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lvItineraries
@@ -39,9 +47,9 @@ namespace ItinerariApp.Forms
             this.lvItineraries.FullRowSelect = true;
             this.lvItineraries.GridLines = true;
             this.lvItineraries.HideSelection = false;
-            this.lvItineraries.Location = new System.Drawing.Point(21, 88);
+            this.lvItineraries.Location = new System.Drawing.Point(21, 105);
             this.lvItineraries.Name = "lvItineraries";
-            this.lvItineraries.Size = new System.Drawing.Size(507, 314);
+            this.lvItineraries.Size = new System.Drawing.Size(457, 297);
             this.lvItineraries.TabIndex = 0;
             this.lvItineraries.UseCompatibleStateImageBehavior = false;
             this.lvItineraries.View = System.Windows.Forms.View.Details;
@@ -58,9 +66,9 @@ namespace ItinerariApp.Forms
             // 
             // btnViewFavorites
             // 
-            this.btnViewFavorites.Location = new System.Drawing.Point(21, 59);
+            this.btnViewFavorites.Location = new System.Drawing.Point(484, 263);
             this.btnViewFavorites.Name = "btnViewFavorites";
-            this.btnViewFavorites.Size = new System.Drawing.Size(127, 23);
+            this.btnViewFavorites.Size = new System.Drawing.Size(109, 23);
             this.btnViewFavorites.TabIndex = 1;
             this.btnViewFavorites.Text = "View Favorites";
             this.btnViewFavorites.UseVisualStyleBackColor = true;
@@ -68,9 +76,9 @@ namespace ItinerariApp.Forms
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(534, 379);
+            this.btnExit.Location = new System.Drawing.Point(484, 379);
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(32, 23);
+            this.btnExit.Size = new System.Drawing.Size(109, 23);
             this.btnExit.TabIndex = 2;
             this.btnExit.Text = "Exit";
             this.btnExit.UseVisualStyleBackColor = true;
@@ -88,7 +96,7 @@ namespace ItinerariApp.Forms
             // 
             // btnViewAllItineraries
             // 
-            this.btnViewAllItineraries.Location = new System.Drawing.Point(154, 59);
+            this.btnViewAllItineraries.Location = new System.Drawing.Point(484, 292);
             this.btnViewAllItineraries.Name = "btnViewAllItineraries";
             this.btnViewAllItineraries.Size = new System.Drawing.Size(109, 23);
             this.btnViewAllItineraries.TabIndex = 4;
@@ -98,9 +106,9 @@ namespace ItinerariApp.Forms
             // 
             // btnAddToFavorites
             // 
-            this.btnAddToFavorites.Location = new System.Drawing.Point(270, 58);
+            this.btnAddToFavorites.Location = new System.Drawing.Point(484, 321);
             this.btnAddToFavorites.Name = "btnAddToFavorites";
-            this.btnAddToFavorites.Size = new System.Drawing.Size(111, 23);
+            this.btnAddToFavorites.Size = new System.Drawing.Size(109, 23);
             this.btnAddToFavorites.TabIndex = 5;
             this.btnAddToFavorites.Text = "Add To Fav";
             this.btnAddToFavorites.UseVisualStyleBackColor = true;
@@ -108,17 +116,60 @@ namespace ItinerariApp.Forms
             // 
             // btnRemoveFromFavorites
             // 
-            this.btnRemoveFromFavorites.Location = new System.Drawing.Point(387, 58);
+            this.btnRemoveFromFavorites.Location = new System.Drawing.Point(484, 350);
             this.btnRemoveFromFavorites.Name = "btnRemoveFromFavorites";
-            this.btnRemoveFromFavorites.Size = new System.Drawing.Size(111, 23);
+            this.btnRemoveFromFavorites.Size = new System.Drawing.Size(109, 23);
             this.btnRemoveFromFavorites.TabIndex = 6;
             this.btnRemoveFromFavorites.Text = "Remove From Fav";
             this.btnRemoveFromFavorites.UseVisualStyleBackColor = true;
             this.btnRemoveFromFavorites.Click += new System.EventHandler(this.btnRemoveFromFavorites_Click);
             // 
+            // txtSearch
+            // 
+            this.txtSearch.Location = new System.Drawing.Point(23, 79);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(100, 20);
+            this.txtSearch.TabIndex = 7;
+            // 
+            // cmbSearchBy
+            // 
+            this.cmbSearchBy.FormattingEnabled = true;
+            this.cmbSearchBy.Items.AddRange(new object[] {
+            "Title",
+            "Location",
+            "Stage",
+            "Tag"});
+            this.cmbSearchBy.Location = new System.Drawing.Point(130, 78);
+            this.cmbSearchBy.Name = "cmbSearchBy";
+            this.cmbSearchBy.Size = new System.Drawing.Size(71, 21);
+            this.cmbSearchBy.TabIndex = 8;
+            // 
+            // btnSearch
+            // 
+            this.btnSearch.Location = new System.Drawing.Point(208, 75);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(49, 23);
+            this.btnSearch.TabIndex = 9;
+            this.btnSearch.Text = "Cerca";
+            this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(23, 60);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(41, 13);
+            this.label2.TabIndex = 10;
+            this.label2.Text = "Search";
+            // 
             // UserDashboardForm
             // 
             this.ClientSize = new System.Drawing.Size(622, 425);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.btnSearch);
+            this.Controls.Add(this.cmbSearchBy);
+            this.Controls.Add(this.txtSearch);
             this.Controls.Add(this.btnRemoveFromFavorites);
             this.Controls.Add(this.btnAddToFavorites);
             this.Controls.Add(this.btnViewAllItineraries);
@@ -186,6 +237,67 @@ namespace ItinerariApp.Forms
             }
         }
 
+        private void SearchItineraries(string query, string searchBy)
+        {
+            try
+            {
+                using (var connection = Database.GetConnection())
+                {
+                    connection.Open();
+                    string sqlQuery = "";
+
+                    switch (searchBy)
+                    {
+                        case "Title":
+                            sqlQuery = "SELECT itinerary_id, title, description FROM gsv_itineraries WHERE title LIKE @query AND is_active = 1";
+                            break;
+                        case "Location":
+                            sqlQuery = @"SELECT i.itinerary_id, i.title, i.description 
+                                 FROM gsv_itineraries i
+                                 INNER JOIN gsv_locations l ON i.location_id = l.location_id
+                                 WHERE l.name LIKE @query AND i.is_active = 1";
+                            break;
+                        case "Stage":
+                            sqlQuery = @"SELECT DISTINCT i.itinerary_id, i.title, i.description 
+                                 FROM gsv_itineraries i
+                                 INNER JOIN gsv_stages s ON i.itinerary_id = s.itinerary_id
+                                 WHERE s.title LIKE @query AND i.is_active = 1";
+                            break;
+                        case "Tag":
+                            sqlQuery = @"SELECT DISTINCT i.itinerary_id, i.title, i.description 
+                                 FROM gsv_itineraries i
+                                 INNER JOIN gsv_itinerary_tags it ON i.itinerary_id = it.itinerary_id
+                                 INNER JOIN gsv_tags t ON it.tag_id = t.tag_id
+                                 WHERE t.name LIKE @query AND i.is_active = 1";
+                            break;
+                        default:
+                            MessageBox.Show("Please select a valid search category.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                    }
+
+                    using (var cmd = new MySqlCommand(sqlQuery, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@query", $"%{query}%");
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            lvItineraries.Items.Clear();
+                            while (reader.Read())
+                            {
+                                var listItem = new ListViewItem(reader.GetInt32("itinerary_id").ToString());
+                                listItem.SubItems.Add(reader.GetString("title"));
+                                listItem.SubItems.Add(reader.GetString("description"));
+                                lvItineraries.Items.Add(listItem);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error searching itineraries: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         private void btnViewFavorites_Click(object sender, EventArgs e)
         {
@@ -267,6 +379,20 @@ namespace ItinerariApp.Forms
             {
                 MessageBox.Show("Please select an itinerary to remove from favorites.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            string query = txtSearch.Text.Trim();
+            string searchBy = cmbSearchBy.SelectedItem?.ToString();
+
+            if (string.IsNullOrEmpty(query) || string.IsNullOrEmpty(searchBy))
+            {
+                MessageBox.Show("Please enter a search query and select a search category.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            SearchItineraries(query, searchBy);
         }
     }
 }
