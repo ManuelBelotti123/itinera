@@ -173,14 +173,56 @@ namespace ItinerariApp.Forms
 
         private void btnEditItinerary_Click(object sender, EventArgs e)
         {
-            // Logica per modificare l'itinerario selezionato
-            MessageBox.Show("Edit Itinerary clicked!");
+            if (lvItineraries.SelectedItems.Count > 0)
+            {
+                int selectedItineraryId = int.Parse(lvItineraries.SelectedItems[0].Text);
+                var editItineraryForm = new EditItineraryForm(selectedItineraryId);
+                editItineraryForm.FormClosed += (s, args) => LoadItineraries(); // Ricarica gli itinerari
+                editItineraryForm.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Please select an itinerary to edit.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void btnDeleteItinerary_Click(object sender, EventArgs e)
         {
-            // Logica per eliminare l'itinerario selezionato
-            MessageBox.Show("Delete Itinerary clicked!");
+            if (lvItineraries.SelectedItems.Count > 0)
+            {
+                int selectedItineraryId = int.Parse(lvItineraries.SelectedItems[0].Text);
+
+                var result = MessageBox.Show("Are you sure you want to delete this itinerary?", "Confirmation",
+                                             MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                if (result == DialogResult.Yes)
+                {
+                    try
+                    {
+                        using (var connection = Database.GetConnection())
+                        {
+                            connection.Open();
+                            string query = @"DELETE FROM gsv_itineraries WHERE itinerary_id = @itineraryId";
+                            using (var cmd = new MySqlCommand(query, connection))
+                            {
+                                cmd.Parameters.AddWithValue("@itineraryId", selectedItineraryId);
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+
+                        MessageBox.Show("Itinerary deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        LoadItineraries();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error deleting itinerary: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select an itinerary to delete.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void btnViewStats_Click(object sender, EventArgs e)
