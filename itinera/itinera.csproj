@@ -117,7 +117,9 @@
     <Compile Include="Forms\LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\UserDashboardForm.cs" />
+    <Compile Include="Forms\UserDashboardForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Models\Itinerary.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Program.cs" />
@@ -125,6 +127,9 @@
     <Compile Include="Utilities\PasswordHelper.cs" />
     <EmbeddedResource Include="Forms\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\UserDashboardForm.resx">
+      <DependentUpon>UserDashboardForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

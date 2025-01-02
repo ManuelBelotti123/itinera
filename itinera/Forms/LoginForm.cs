@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using ItinerariApp.DataAccess;
+using itinera.Forms;
 
 namespace ItinerariApp.Forms
 {
@@ -99,6 +100,7 @@ namespace ItinerariApp.Forms
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "LoginForm";
+            this.Load += new System.EventHandler(this.LoginForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -115,11 +117,30 @@ namespace ItinerariApp.Forms
             string username = txtUsername.Text;
             string password = txtPassword.Text;
 
-            if (ValidateUser(username, password))
+            string userType = ValidateUser(username, password);
+
+            if (!string.IsNullOrEmpty(userType))
             {
                 MessageBox.Show("Login successful!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                // Placeholder for opening the dashboard
-                // OpenDashboard();
+        
+        // Apri la dashboard appropriata
+                Form dashboard;
+                if (userType == "base")
+                {
+                    dashboard = new UserDashboardForm();
+                }
+                else if (userType == "ente")
+                {
+                    dashboard = null; // new EntityDashboardForm();
+                }
+                else
+                {
+                    MessageBox.Show("Unknown user type.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                dashboard.Show();
+                this.Hide(); // Nascondi il form di login
             }
             else
             {
@@ -127,14 +148,14 @@ namespace ItinerariApp.Forms
             }
         }
 
-        private bool ValidateUser(string username, string password)
+        private string ValidateUser(string username, string password)
         {
             try
             {
                 using (var connection = Database.GetConnection())
                 {
                     connection.Open();
-                    string query = "SELECT password FROM gsv_users WHERE username = @username";
+                    string query = "SELECT user_type, password FROM gsv_users WHERE username = @username";
                     using (var cmd = new MySqlCommand(query, connection))
                     {
                         cmd.Parameters.AddWithValue("@username", username);
@@ -144,11 +165,9 @@ namespace ItinerariApp.Forms
                             if (reader.Read())
                             {
                                 string storedHash = reader.GetString("password");
-
-                                // Verifica della password con BCrypt
                                 if (BCrypt.Net.BCrypt.Verify(password, storedHash))
                                 {
-                                    return true;
+                                    return reader.GetString("user_type");
                                 }
                             }
                         }
@@ -159,12 +178,17 @@ namespace ItinerariApp.Forms
             {
                 MessageBox.Show($"Error: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            return false;
+            return null; // Restituisce null se il login non è valido
         }
 
         private void btnExit_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void LoginForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
