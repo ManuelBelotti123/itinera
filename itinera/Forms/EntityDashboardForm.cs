@@ -166,8 +166,9 @@ namespace ItinerariApp.Forms
 
         private void btnAddItinerary_Click(object sender, EventArgs e)
         {
-            // Logica per aggiungere un nuovo itinerario
-            MessageBox.Show("Add Itinerary clicked!");
+            var addItineraryForm = new AddItineraryForm();
+            addItineraryForm.FormClosed += (s, args) => LoadItineraries(); // Ricarica la lista degli itinerari
+            addItineraryForm.ShowDialog();
         }
 
         private void btnEditItinerary_Click(object sender, EventArgs e)
