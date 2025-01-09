@@ -16,6 +16,7 @@ namespace ItinerariApp.Forms
         private Button btnViewStats;
         private Button btnAddItinerary;
         private Button btnExit;
+        private Button btnViewItinerary;
         private ColumnHeader columnHeader2;
 
         private void InitializeComponent()
@@ -30,6 +31,7 @@ namespace ItinerariApp.Forms
             this.btnViewStats = new System.Windows.Forms.Button();
             this.btnAddItinerary = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
+            this.btnViewItinerary = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lvItineraries
@@ -76,9 +78,9 @@ namespace ItinerariApp.Forms
             // 
             // btnEditItinerary
             // 
-            this.btnEditItinerary.Location = new System.Drawing.Point(154, 58);
+            this.btnEditItinerary.Location = new System.Drawing.Point(126, 58);
             this.btnEditItinerary.Name = "btnEditItinerary";
-            this.btnEditItinerary.Size = new System.Drawing.Size(127, 23);
+            this.btnEditItinerary.Size = new System.Drawing.Size(87, 23);
             this.btnEditItinerary.TabIndex = 8;
             this.btnEditItinerary.Text = "Edit Itinerary";
             this.btnEditItinerary.UseVisualStyleBackColor = true;
@@ -86,9 +88,9 @@ namespace ItinerariApp.Forms
             // 
             // btnDeleteItinerary
             // 
-            this.btnDeleteItinerary.Location = new System.Drawing.Point(287, 58);
+            this.btnDeleteItinerary.Location = new System.Drawing.Point(219, 58);
             this.btnDeleteItinerary.Name = "btnDeleteItinerary";
-            this.btnDeleteItinerary.Size = new System.Drawing.Size(127, 23);
+            this.btnDeleteItinerary.Size = new System.Drawing.Size(95, 23);
             this.btnDeleteItinerary.TabIndex = 9;
             this.btnDeleteItinerary.Text = "Delete Itinerary";
             this.btnDeleteItinerary.UseVisualStyleBackColor = true;
@@ -96,9 +98,9 @@ namespace ItinerariApp.Forms
             // 
             // btnViewStats
             // 
-            this.btnViewStats.Location = new System.Drawing.Point(420, 58);
+            this.btnViewStats.Location = new System.Drawing.Point(320, 58);
             this.btnViewStats.Name = "btnViewStats";
-            this.btnViewStats.Size = new System.Drawing.Size(127, 23);
+            this.btnViewStats.Size = new System.Drawing.Size(90, 23);
             this.btnViewStats.TabIndex = 10;
             this.btnViewStats.Text = "View Stats";
             this.btnViewStats.UseVisualStyleBackColor = true;
@@ -108,7 +110,7 @@ namespace ItinerariApp.Forms
             // 
             this.btnAddItinerary.Location = new System.Drawing.Point(21, 58);
             this.btnAddItinerary.Name = "btnAddItinerary";
-            this.btnAddItinerary.Size = new System.Drawing.Size(127, 23);
+            this.btnAddItinerary.Size = new System.Drawing.Size(99, 23);
             this.btnAddItinerary.TabIndex = 11;
             this.btnAddItinerary.Text = "Add Itinerary";
             this.btnAddItinerary.UseVisualStyleBackColor = true;
@@ -124,9 +126,20 @@ namespace ItinerariApp.Forms
             this.btnExit.UseVisualStyleBackColor = true;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
+            // btnViewItinerary
+            // 
+            this.btnViewItinerary.Location = new System.Drawing.Point(416, 58);
+            this.btnViewItinerary.Name = "btnViewItinerary";
+            this.btnViewItinerary.Size = new System.Drawing.Size(96, 23);
+            this.btnViewItinerary.TabIndex = 13;
+            this.btnViewItinerary.Text = "View Itineraries";
+            this.btnViewItinerary.UseVisualStyleBackColor = true;
+            this.btnViewItinerary.Click += new System.EventHandler(this.btnViewItinerary_Click);
+            // 
             // EntityDashboardForm
             // 
             this.ClientSize = new System.Drawing.Size(614, 413);
+            this.Controls.Add(this.btnViewItinerary);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnAddItinerary);
             this.Controls.Add(this.btnViewStats);
@@ -257,6 +270,20 @@ namespace ItinerariApp.Forms
         private void btnExit_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void btnViewItinerary_Click(object sender, EventArgs e)
+        {
+            if (lvItineraries.SelectedItems.Count > 0)
+            {
+                int selectedItineraryId = int.Parse(lvItineraries.SelectedItems[0].Text);
+                var viewItineraryForm = new ViewItineraryForm(selectedItineraryId);
+                viewItineraryForm.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Please select an itinerary to view.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
     }
 }

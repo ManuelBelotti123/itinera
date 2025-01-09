@@ -20,6 +20,7 @@ namespace ItinerariApp.Forms
         private ComboBox cmbSearchBy;
         private Button btnSearch;
         private Label label2;
+        private Button btnViewItinerary;
         private ListView lvItineraries;
 
         private void InitializeComponent()
@@ -37,6 +38,7 @@ namespace ItinerariApp.Forms
             this.cmbSearchBy = new System.Windows.Forms.ComboBox();
             this.btnSearch = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
+            this.btnViewItinerary = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lvItineraries
@@ -163,9 +165,20 @@ namespace ItinerariApp.Forms
             this.label2.TabIndex = 10;
             this.label2.Text = "Search";
             // 
+            // btnViewItinerary
+            // 
+            this.btnViewItinerary.Location = new System.Drawing.Point(484, 234);
+            this.btnViewItinerary.Name = "btnViewItinerary";
+            this.btnViewItinerary.Size = new System.Drawing.Size(109, 23);
+            this.btnViewItinerary.TabIndex = 14;
+            this.btnViewItinerary.Text = "View Itineraries";
+            this.btnViewItinerary.UseVisualStyleBackColor = true;
+            this.btnViewItinerary.Click += new System.EventHandler(this.btnViewItinerary_Click);
+            // 
             // UserDashboardForm
             // 
             this.ClientSize = new System.Drawing.Size(622, 425);
+            this.Controls.Add(this.btnViewItinerary);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.cmbSearchBy);
@@ -393,6 +406,20 @@ namespace ItinerariApp.Forms
             }
 
             SearchItineraries(query, searchBy);
+        }
+
+        private void btnViewItinerary_Click(object sender, EventArgs e)
+        {
+            if (lvItineraries.SelectedItems.Count > 0)
+            {
+                int selectedItineraryId = int.Parse(lvItineraries.SelectedItems[0].Text);
+                var viewItineraryForm = new ViewItineraryForm(selectedItineraryId);
+                viewItineraryForm.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Please select an itinerary to view.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
     }
 }
